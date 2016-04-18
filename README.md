@@ -12,3 +12,6 @@ Ionut Sandric, Viorel Ilinca, Marta Jurchescu, Zenaida Chitu - Uncertainty ptopa
 
 # Dependencies
 ArcGIS for Desktop 10.3.1 with Spatial Analyst extension
+
+#Contact
+ionut.sandric@geo.unibuc.ro - sandricionut@yahoo.com
