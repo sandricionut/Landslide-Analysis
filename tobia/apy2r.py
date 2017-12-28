@@ -1,6 +1,8 @@
 
 
-import os, sys, arcpy
+import os
+import sys
+import arcpy
 import arcpy.sa
 
 arcpy.CheckOutExtension('Spatial')
