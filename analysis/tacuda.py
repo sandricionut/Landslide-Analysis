@@ -1,22 +1,29 @@
 
-
-import os
-import sys
-import arcpy
 import subprocess
-import tempfile
 
 
 class taCUDA():
     pass
 
-    def __init__(self):
-        pass
+    def __init__(self, georsgpu_path):
+        self._georsgpu = georsgpu_path
 
-    def calculate(self, inFile, outFile, command, options=None):
+    def calculate(self, in_file, out_file, command, options=None):
         if(options is not None):
             pass
         else:
-            sincronizare = subprocess.Popen(r"d:\GitHub\GeoRsGPU\GeoRsGPU\x64\Release\GeoRsGPU.exe {} {} {}".format(command, inFile, outFile), stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
+            print("{} {} {} {}".format(self._georsgpu, command, in_file, out_file))
+            sincronizare = subprocess.Popen("{} {} {} {}".format(self._georsgpu, command, in_file, out_file), stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
         result, error = sincronizare.communicate()
-        # return result, error
+
+
+    def profile_curvature(self, in_dem, out_prof_curvature):
+        self.calculate(in_file=in_dem, out_file=out_prof_curvature, command="profileCurvature")
+
+
+    def plan_curvature(self, in_dem, out_plan_curvature):
+        self.calculate(in_file=in_dem, out_file=out_plan_curvature, command="planCurvature")
+
+
+    def slope(self, in_dem, out_slope):
+        self.calculate(in_file=in_dem, out_file=out_slope, command="slope")
