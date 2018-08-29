@@ -12,9 +12,10 @@ from sklearn.metrics import roc_auc_score
 
 class WofESimulations():
 
-    def __init__(self, out_woe_map):
+    def __init__(self, out_woe_map, out_name_prefix):
         self._no_simulations = None
         self._out_woe_map = out_woe_map
+        self._out_name_prefix = out_name_prefix
 
     def simulate(self, no_simulations, in_dem_sim, landslide_sim, stats_file, nominal_data, mask):
         # Generate noise for DEM
@@ -91,11 +92,11 @@ class WofESimulations():
             #
             rastersResult = we.conditionalProbability(in_landslides_train, array_evidence, stats_file, iteration=i)
             #
-            we.woeMap(rastersResult, arcpy.Raster(dem_noise), os.path.join(self._out_woe_map, "wf{}.tif".format(str(i))))
+            we.woeMap(rastersResult, arcpy.Raster(dem_noise), os.path.join(self._out_woe_map, "{}_{}.tif".format(self._out_name_prefix, str(i))))
 
 #             Validation ROC-AUC
-            n_sim_landslides_raster_test = arcpy.RasterToNumPyArray(sim_landslides_raster_test)
-            n_raster_result = arcpy.RasterToNumPyArray(os.path.join(self._out_woe_map, "wf{}.tif".format(str(i))))
-            roc_auc = roc_auc_score(n_sim_landslides_raster_test, n_raster_result)
-            print(roc_auc)
+#             n_sim_landslides_raster_test = arcpy.RasterToNumPyArray(sim_landslides_raster_test)
+            # n_raster_result = arcpy.RasterToNumPyArray(os.path.join(self._out_woe_map, "wf{}.tif".format(str(i))))
+            # roc_auc = roc_auc_score(n_sim_landslides_raster_test, n_raster_result)
+            # print(roc_auc)
 
