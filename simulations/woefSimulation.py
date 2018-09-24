@@ -17,7 +17,7 @@ class WofESimulations():
         self._out_woe_map = out_woe_map
         self._out_name_prefix = out_name_prefix
 
-    def simulate(self, no_simulations, in_dem_sim, landslide_sim, stats_file, nominal_data, mask):
+    def simulate(self, no_simulations, in_dem_sim, landslide_sim, stats_file, nominal_data, mask, noise_factor):
         # Generate noise for DEM
         # terrain_analysis = tacuda.taCUDA(georsgpu_path=georsgpu)
         georsgpu = r"d:\GitHub\GeoRsGPU\GeoRsGPU\x64\Release\GeoRsGPU.exe"
@@ -29,7 +29,7 @@ class WofESimulations():
             array_evidence = []
             # array_evidence.append(x for x in nominal_data)
             array_evidence = nominal_data
-            dem_noise = in_dem_sim.dem_noise()
+            dem_noise = in_dem_sim.dem_noise2(noise_factor=noise_factor)
             landslide_noise = landslide_sim.simulate()
             print()
             #
