@@ -39,13 +39,15 @@ if __name__ == "__main__":
     for noise_value in noise_values:
         # mask_raster = dem_simulate.CreateMask(mask_vector, "ID", cell_size=arcpy.Raster(in_dem).meanCellHeight)
         # noise_order_value=3
+        print("Noise: ", noise_value)
         out_stats_file = os.path.join(out_path_stats, "prodCondI2018_{}.txt".format(noise_value))
         dem_simulate = demSimulation.DemSimulations(in_dem=indem, out_dem=r"d:\Personal\Temp\Temporar\demsim.tif", mean=landslides_mapping_error_mean, stdev=landslides_mapping_error_stdev, noise_order=noise_value, temp_location=out_path_temp, mask=mask_raster)
         # dem_simulate.run()
         landslide_simulate = landslidesSimulation.LandslideSimulations(in_landslides=initial_landslides, out_landslides=r"d:\Personal\Temp\Temporar\ls.shp", mean=landslides_mapping_error_mean, stdev=landslides_mapping_error_stdev, temp_location=out_path_temp)
 
         wofe_m = woefSimulation.WofESimulations(out_woe_map=out_path_woe, out_name_prefix="wf_{}".format(str(noise_value)))
-        wofe_m.simulate(2, in_dem_sim=dem_simulate, landslide_sim=landslide_simulate, stats_file=out_stats_file, nominal_data=[inlulc, inlithology], mask=mask_raster, noise_factor=noise_value)
+        for i in range(0, 100, 1):
+            wofe_m.simulate(i, in_dem_sim=dem_simulate, landslide_sim=landslide_simulate, stats_file=out_stats_file, nominal_data=[inlulc, inlithology], mask=mask_raster, noise_factor=noise_value)
 
 
     # for file in os.listdir(out_path_temp):
