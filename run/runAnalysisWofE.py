@@ -35,7 +35,7 @@ if __name__ == "__main__":
     landslides_mapping_error_mean = 50
     landslides_mapping_error_stdev = 20
     # noise_values = numpy.arange(0.5,5.5,0.5)
-    noise_values = [x for x in range(0, 11, 1)]
+    noise_values = [x for x in range(0, 1, 1)]
     for noise_value in noise_values:
         # mask_raster = dem_simulate.CreateMask(mask_vector, "ID", cell_size=arcpy.Raster(in_dem).meanCellHeight)
         # noise_order_value=3
