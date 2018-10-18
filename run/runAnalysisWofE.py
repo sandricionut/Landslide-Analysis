@@ -39,6 +39,7 @@ if __name__ == "__main__":
     for noise_value in noise_values:
         # mask_raster = dem_simulate.CreateMask(mask_vector, "ID", cell_size=arcpy.Raster(in_dem).meanCellHeight)
         # noise_order_value=3
+        print("Noise: ", noise_value)
         out_stats_file = os.path.join(out_path_stats, "prodCondI2018_{}.txt".format(noise_value))
         dem_simulate = demSimulation.DemSimulations(in_dem=indem, out_dem=r"d:\Personal\Temp\Temporar\demsim.tif", mean=landslides_mapping_error_mean, stdev=landslides_mapping_error_stdev, noise_order=noise_value, temp_location=out_path_temp, mask=mask_raster)
         # dem_simulate.run()

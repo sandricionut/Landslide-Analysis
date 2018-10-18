@@ -12,7 +12,7 @@ class taCUDA():
         if(options is not None):
             pass
         else:
-            print("{} {} {} {}".format(self._georsgpu, command, in_file, out_file))
+            # print("{} {} {} {}".format(self._georsgpu, command, in_file, out_file))
             sincronizare = subprocess.Popen("{} {} {} {}".format(self._georsgpu, command, in_file, out_file), stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
         result, error = sincronizare.communicate()
 
