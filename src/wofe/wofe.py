@@ -5,7 +5,7 @@ import arcpy
 import numpy
 import math
 
-class WofE():
+class WeigtEvidence():
 
     def __init__(self):
 

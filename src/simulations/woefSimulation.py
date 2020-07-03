@@ -4,7 +4,7 @@ import os
 import numpy
 import arcpy
 from other import tacuda, randomSelection
-from src.tobia import wofe
+from src import wofe
 import datetime
 
 class WofESimulations():
