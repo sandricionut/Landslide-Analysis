@@ -1,13 +1,10 @@
 
 
 import os
-import sys
 import numpy
 import arcpy
-from analysis import tacuda
-from analysis import randomSelection
-from analysis import wofe
-from sklearn.metrics import roc_auc_score
+from other import tacuda, randomSelection
+from src.wofe import wofe
 import datetime
 
 class WofESimulations():
@@ -46,7 +43,7 @@ class WofESimulations():
         out_profile_curvatureR = os.path.join(temp_location, "profcR_{}.tif".format(str(i)))
         out_plan_curvatureR = os.path.join(temp_location, "plancR_{}.tif".format(str(i)))
 
-        # Call georsgpu for terrain analyses - this can be replaced with any other terrain analysis software
+        # Call georsgpu for terrain analyses - this can be replaced with any other terrain src software
         ta.slope(dem_noise, outSlope)
         ta.plan_curvature(dem_noise, outProfileCurvature)
         ta.profile_curvature(dem_noise, out_plan_curvature)
