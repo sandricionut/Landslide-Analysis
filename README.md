@@ -6,9 +6,9 @@ The work is under developemnt and so far we have added tools for identification 
 # Credit
 In preparation:
 
-Viorel Ilina, Ionut Sandric, Marta Jurchescu, Zenaida Chitu - Structural control of landslides. A regional approach using TOBIA index
+Ionut Sandric, Cristian Ionita, Zenaida Chitu, Marian Dardala, Radu Irimia, Titus Furtuna, Using CUDA to accelerate uncertainty propagation modelling for landslide susceptibility assessment, February 2019 - Environmental Modelling and Software
+DOI: 10.1016/j.envsoft.2019.02.016
 
-Ionut Sandric, Viorel Ilinca, Marta Jurchescu, Zenaida Chitu - Uncertainty propagation in TOBIA analysis
 
 # Dependencies
 ArcGIS for Desktop 10.3.1 with Spatial Analyst extension
