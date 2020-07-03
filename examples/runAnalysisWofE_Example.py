@@ -6,8 +6,8 @@ import numpy
 
 # Custom libraries
 from other import tacuda
-from src.wofe import wofe
-from simulations import landslidesSimulation, demSimulation
+from src.tobia import wofe
+from src.simulations import landslidesSimulation, demSimulation
 
 if __name__ == "__main__":
 

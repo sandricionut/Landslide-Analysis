@@ -4,8 +4,8 @@ import arcpy
 import datetime
 
 # Custom libraries
-from src.wofe import wofe
-from simulations import landslidesSimulation, demSimulation, woefSimulation
+from src.tobia import wofe
+from src.simulations import landslidesSimulation, demSimulation, woefSimulation
 
 if __name__ == "__main__":
 
