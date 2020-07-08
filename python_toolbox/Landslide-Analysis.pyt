@@ -65,6 +65,7 @@ class WofE(object):
         _set_module_path()
         from wofe import wofe
         weightEvidence = wofe.WeigtEvidence()
+        prior_p = weightEvidence.priorProbability(raster=parameters[0])
         result = weightEvidence.conditionalProbability(parameters[0], parameters[1], parameters[2], iteration=0)
         weightEvidence.woeMap(result, arcpy.Raster(parameters[0]), parameters[3])
         return

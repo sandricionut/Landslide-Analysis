@@ -20,6 +20,20 @@ class WeigtEvidence():
         self._nrows = 0
         self._ncols = 0
 
+    def set_stats_file(self, in_stats):
+        if (os.path.exists(in_stats)):
+            f = open(in_stats, "w")
+            f.write(
+                "rasterName\tclass\tweightPositive\tweightNegative\tcontrast\tweightNegativeSum\tareaClassPresence\tareaTotalPresenceMinusClass\tareaClassAbsence\tareaTotalAbsence\ts2Wp\ts2wN\tstudentized\n")
+            f.close()
+
+
+    def math_rasters_size(self, in_rasters, out_rasters):
+        extent_rasters = []
+        for raster in in_rasters:
+            extent_rasters.append(raster.extent)
+        return None
+
 
     def priorProbability(self, raster):
 
@@ -45,7 +59,10 @@ class WeigtEvidence():
 
     def conditionalProbability(self, raster1, evidenceArray, out_stats_file, iteration=0):
 
-        fResultsOut = open(os.path.normpath(os.path.join(out_stats_file)), 'a')
+        # fResultsOut = open(os.path.normpath(os.path.join(out_stats_file)), 'a')
+        self.set_stats_file(in_stats=out_stats_file)
+
+        fResultsOut = open(os.path.join(out_stats_file), 'a')
         rastersResult = []
 
         # For each raster from raster array
