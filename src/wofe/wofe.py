@@ -14,8 +14,8 @@ class WeigtEvidence():
         self._NPIX3 = 0
         self._NPIX4 = 0
         self._noData = 255
-        self._totalPresence = 0
-        self._totalAbsence = 0
+        self._total_presence = 0
+        self.__total_absence = 0
         self._total = 0
         self._nrows = 0
         self._ncols = 0
@@ -24,7 +24,7 @@ class WeigtEvidence():
         if (os.path.exists(in_stats)):
             f = open(in_stats, "w")
             f.write(
-                "rasterName\tclass\tweightPositive\tweightNegative\tcontrast\tweightNegativeSum\tareaClassPresence\tareaTotalPresenceMinusClass\tareaClassAbsence\tareaTotalAbsence\ts2Wp\ts2wN\tstudentized\n")
+                "raster_name\tclass\tweightPositive\tweightNegative\tcontrast\tweight_negative_sum\tareaClassPresence\tareaTotalPresenceMinusClass\tareaClassAbsence\tarea_total_absence\ts2Wp\ts2wN\tstudentized\n")
             f.close()
 
 
@@ -37,46 +37,46 @@ class WeigtEvidence():
 
     def priorProbability(self, raster):
 
-        rasterArray = arcpy.RasterToNumPyArray(raster)
-        uniqueValues = numpy.unique(rasterArray, return_counts=True)
+        raster_array = arcpy.RasterToNumPyArray(raster)
+        unique_values = numpy.unique(raster_array, return_counts=True)
 
-        presence = uniqueValues[1][1]
-        absence = uniqueValues[1][0]
+        presence = unique_values[1][1]
+        absence = unique_values[1][0]
         total = presence + absence
-        self._totalPresence = presence
-        self._totalAbsence = absence
+        self._total_presence = presence
+        self.__total_absence = absence
         self._total = total
 
         return presence / total
 
 
-    def posteriorProbability(self, prior, conditional):
+    def posterior_probability(self, prior, conditional):
         pass
 
-    def posteriorOdds(self, prior, conditional):
+    def posterior_odds(self, prior, conditional):
         pass
 
 
-    def conditionalProbability(self, raster1, evidenceArray, out_stats_file, iteration=0):
+    def conditional_probability(self, raster1, evidence_array, out_stats_file, iteration=0):
 
-        # fResultsOut = open(os.path.normpath(os.path.join(out_stats_file)), 'a')
-        self.set_stats_file(in_stats=out_stats_file)
+        # f_results_out = open(os.path.normpath(os.path.join(out_stats_file)), 'a')
+        # self.set_stats_file(in_stats=out_stats_file)
 
-        fResultsOut = open(os.path.join(out_stats_file), 'a')
-        rastersResult = []
+        f_results_out = open(os.path.join(out_stats_file), 'a')
+        rasters_result = []
 
         # For each raster from raster array
-        for raster in evidenceArray:
+        for raster in evidence_array:
             tabRaster, uniqueRaster1, uniqueEvidence = self.crossTabRaster(raster1, raster)
-            rasterName = os.path.splitext(os.path.basename(raster))[0] + ".txt"
-            rasterName = rasterName.split("_")[0]
-            weightNegativeSum = 0
+            raster_name = os.path.splitext(os.path.basename(raster))[0]
+            # raster_name = raster_name.split("_")[0]
+            weight_negative_sum = 0
 
-            rasterMetadata = arcpy.Raster(raster)
-            npRaster = arcpy.RasterToNumPyArray(raster)
+            raster_metadata = arcpy.Raster(raster)
+            np_raster = arcpy.RasterToNumPyArray(raster)
 
-            npRasterResult = numpy.zeros_like(npRaster, dtype=numpy.float64)
-            weightPositiveArray = []
+            np_rasterResult = numpy.zeros_like(np_raster, dtype=numpy.float64)
+            weight_positive_array = []
             weightNegativeArray = []
 
             for u in uniqueEvidence:
@@ -86,23 +86,23 @@ class WeigtEvidence():
                 s2Wp = 0.0
                 s2wN = 0.0
                 areaClassPresence = float(tabRaster[1][uniqueEvidence.index(u)]) #NPIX1
-                areaTotalPresenceMinusClass = float(self._totalPresence - areaClassPresence) #NPIX2
+                areaTotalPresenceMinusClass = float(self._total_presence - areaClassPresence) #NPIX2
                 areaClassAbsence = float(tabRaster[0][uniqueEvidence.index(u)]) #NPIX3
-                areaTotalAbsence = float(self._total - self._totalPresence - areaClassPresence + areaClassAbsence + areaClassPresence) #NPIX4
+                area_total_absence = float(self._total - self._total_presence - areaClassPresence + areaClassAbsence + areaClassPresence) #NPIX4
                 try:
-                    weightNegative = self.negativeWeight(areaClassPresence, areaTotalPresenceMinusClass, areaClassAbsence, areaTotalAbsence)
-                    weightNegativeSum = weightNegativeSum + weightNegative
+                    weightNegative = self.negativeWeight(areaClassPresence, areaTotalPresenceMinusClass, areaClassAbsence, area_total_absence)
+                    weight_negative_sum = weight_negative_sum + weightNegative
                     weightNegativeArray.append(weightNegative)
                 except:
-                    weightNegativeSum = weightNegativeSum + weightNegative
+                    weight_negative_sum = weight_negative_sum + weightNegative
                     weightNegativeArray.append(weightNegative)
 
                 try:
-                    weightPositive = self.positiveWeight(areaTotalPresenceMinusClass, areaClassPresence, areaTotalAbsence, areaClassAbsence)
-                    # weightPositive = math.log( (areaClassPresence / (areaClassPresence + areaTotalPresenceMinusClass)) / ( areaClassAbsence / (areaClassAbsence + areaTotalAbsence)) )
-                    weightPositiveArray.append(weightPositive)
+                    weightPositive = self.positiveWeight(areaTotalPresenceMinusClass, areaClassPresence, area_total_absence, areaClassAbsence)
+                    # weightPositive = math.log( (areaClassPresence / (areaClassPresence + areaTotalPresenceMinusClass)) / ( areaClassAbsence / (areaClassAbsence + area_total_absence)) )
+                    weight_positive_array.append(weightPositive)
                 except:
-                    weightPositiveArray.append(weightPositive)
+                    weight_positive_array.append(weightPositive)
 
                 try:
                     s2Wp = 1 / (areaClassPresence) + 1 / (areaClassAbsence)
@@ -117,37 +117,37 @@ class WeigtEvidence():
                 contrast = self.contrast(weightPositive, weightNegative)
                 studentized = self.studentized(s2Wp, s2wN)
 
-                fResultsOut.write("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n".format(rasterName, u, weightPositive, weightNegative, contrast, weightNegativeSum, areaClassPresence, areaTotalPresenceMinusClass, areaClassAbsence, areaTotalAbsence, s2Wp, s2wN, studentized, iteration))
-                fResultsOut.flush()
-                # print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n".format(rasterName, u, weightPositive, weightNegative, contrast, weightNegativeSum, areaClassPresence, areaTotalPresenceMinusClass, areaClassAbsence, areaTotalAbsence, s2Wp, s2wN, studentized, iteration))
+                f_results_out.write("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n".format(raster_name, u, weightPositive, weightNegative, contrast, weight_negative_sum, areaClassPresence, areaTotalPresenceMinusClass, areaClassAbsence, area_total_absence, s2Wp, s2wN, studentized, iteration))
+                f_results_out.flush()
+                # print("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n".format(raster_name, u, weightPositive, weightNegative, contrast, weight_negative_sum, areaClassPresence, areaTotalPresenceMinusClass, areaClassAbsence, area_total_absence, s2Wp, s2wN, studentized, iteration))
 
-                numpy.place(npRasterResult, npRaster == u, contrast)
+                numpy.place(np_rasterResult, np_raster == u, contrast)
 
-            rastersResult.append(npRasterResult)
-        fResultsOut.close()
-        # print(rastersResult)
-        return rastersResult
+            rasters_result.append(np_rasterResult)
+        f_results_out.close()
+        # print(rasters_result)
+        return rasters_result
 
 
-    def woeMap(self, conditionalProbabilitiesMaps, metadata, rasterName):
+    def woeMap(self, conditionalProbabilitiesMaps, metadata, raster_name):
         woeMap = numpy.zeros_like(conditionalProbabilitiesMaps[0])
         for raster in conditionalProbabilitiesMaps:
             woeMap = woeMap + raster
 
         npResultArcGIS = arcpy.NumPyArrayToRaster(woeMap, arcpy.Point(metadata.extent.XMin, metadata.extent.YMin), metadata.meanCellWidth, metadata.meanCellHeight)
-        npResultArcGIS.save(rasterName)
+        npResultArcGIS.save(raster_name)
 
 
     def contrast(self, weightPositive, weightNegative):
         return weightNegative - weightPositive
 
 
-    def positiveWeight(self, areaTotalPresenceMinusClass, areaClassPresence, areaTotalAbsence, areaClassAbsence):
-        return math.log( (areaTotalPresenceMinusClass / (areaTotalPresenceMinusClass + areaClassPresence) ) / (areaTotalAbsence / (areaTotalAbsence + areaClassAbsence)) )
+    def positiveWeight(self, areaTotalPresenceMinusClass, areaClassPresence, area_total_absence, areaClassAbsence):
+        return math.log( (areaTotalPresenceMinusClass / (areaTotalPresenceMinusClass + areaClassPresence) ) / (area_total_absence / (area_total_absence + areaClassAbsence)) )
 
 
-    def negativeWeight(self, areaClassPresence, areaTotalPresenceMinusClass, areaClassAbsence, areaTotalAbsence):
-        return math.log( (areaClassPresence / (areaClassPresence + areaTotalPresenceMinusClass)) / ( areaClassAbsence / (areaClassAbsence + areaTotalAbsence)) )
+    def negativeWeight(self, areaClassPresence, areaTotalPresenceMinusClass, areaClassAbsence, area_total_absence):
+        return math.log( (areaClassPresence / (areaClassPresence + areaTotalPresenceMinusClass)) / ( areaClassAbsence / (areaClassAbsence + area_total_absence)) )
 
 
     def studentized(self, s2Wp, s2wN):
