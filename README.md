@@ -5,7 +5,7 @@ The work is under developemnt and so far we have added tools for identification 
 
 # Credit
 Ionut Sandric, Cristian Ionita, Zenaida Chitu, Marian Dardala, Radu Irimia, Titus Furtuna, Using CUDA to accelerate uncertainty propagation modelling for landslide susceptibility assessment, February 2019 - Environmental Modelling and Software
-DOI: 10.1016/j.envsoft.2019.02.016
+DOI: https://doi.org/10.1016/j.envsoft.2019.02.016
 
 
 # Dependencies
